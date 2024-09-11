@@ -12,14 +12,22 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   final List<Meal> _favoriteMeals = [];
+  void _showInfoMessage(String message) {
+    ScaffoldMessenger.of(context)
+        .clearSnackBars(); // Xóa tất cả các snack bar đang hiển thị.
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
 
   void _toggleFavoriteStatus(Meal meal) {
     final isExisting = _favoriteMeals.contains(meal);
     setState(() {
       if (isExisting) {
         _favoriteMeals.remove(meal);
+        _showInfoMessage('Removed from favorites!');
       } else {
         _favoriteMeals.add(meal);
+        _showInfoMessage('Added to favorites!');
       }
     });
   }
