@@ -10,24 +10,20 @@ class TabsScreen extends StatefulWidget {
   State<TabsScreen> createState() => _TabsScreenState();
 }
 
-/*Hàm _toggleFavoriteStatus(Meal meal) được 
-  thiết kế để thay đổi trạng thái yêu thích của
-  món ăn bằng cách thêm hoặc xóa nó từ danh sách
-  yêu thích. Nếu món ăn đã tồn tại trong danh sách,
-  nó sẽ bị xóa; nếu không, nó sẽ được thêm vào danh 
-  sách. Đây là một cách hiệu quả để quản lý trạng 
-  thái yêu thích của các món ăn trong ứng dụng.*/
-final List<Meal> _favoriteMeals = [];
-void _toggleFavoriteStatus(Meal meal) {
-  final isExisting = _favoriteMeals.contains(meal);
-  if (isExisting) {
-    _favoriteMeals.remove(meal);
-  } else {
-    _favoriteMeals.add(meal);
-  }
-}
-
 class _TabsScreenState extends State<TabsScreen> {
+  final List<Meal> _favoriteMeals = [];
+
+  void _toggleFavoriteStatus(Meal meal) {
+    final isExisting = _favoriteMeals.contains(meal);
+    setState(() {
+      if (isExisting) {
+        _favoriteMeals.remove(meal);
+      } else {
+        _favoriteMeals.add(meal);
+      }
+    });
+  }
+
   int _selectedTabIndex = 0;
   void _selectPage(int index) {
     setState(() {
@@ -42,8 +38,8 @@ class _TabsScreenState extends State<TabsScreen> {
     );
     var activePageTitle = 'Categories';
     if (_selectedTabIndex == 1) {
-      activePage = const MealsScreen(
-        meals: [],
+      activePage = MealsScreen(
+        meals: _favoriteMeals,
         onToggleFavorite: _toggleFavoriteStatus,
       );
       activePageTitle = 'Your Favorites';
