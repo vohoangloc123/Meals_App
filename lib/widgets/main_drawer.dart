@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class MainDrawer extends StatelessWidget {
-  const MainDrawer({super.key});
-
+  const MainDrawer({super.key, required this.onSelectedScreen});
+  final void Function(String identifier) onSelectedScreen;
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
         children: [
           DrawerHeader(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -30,7 +30,7 @@ class MainDrawer extends StatelessWidget {
                   size: 48,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Text(
                   'Cooking Up!',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -54,7 +54,7 @@ class MainDrawer extends StatelessWidget {
                   ),
             ),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/');
+              onSelectedScreen('meals');
             },
           ),
           ListTile(
@@ -71,7 +71,7 @@ class MainDrawer extends StatelessWidget {
                   ),
             ),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/');
+              onSelectedScreen('filters');
             },
           ),
         ],
