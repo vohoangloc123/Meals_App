@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/data/dummy_data.dart';
 import 'package:meals_app/models/meals.dart';
 import 'package:meals_app/screens/categories.dart';
 import 'package:meals_app/screens/filters.dart';
 import 'package:meals_app/screens/meals.dart';
 import 'package:meals_app/widgets/main_drawer.dart';
+
+const kInitialFilters = {
+  Filter.glutenFree: false,
+  Filter.lactoseFree: false,
+  Filter.vegetarian: false,
+  Filter.vegan: false,
+};
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -14,6 +22,7 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   final List<Meal> _favoriteMeals = [];
+  Map<Filter, bool> _selectedfilters = kInitialFilters;
   void _showInfoMessage(String message) {
     ScaffoldMessenger.of(context)
         .clearSnackBars(); // Xóa tất cả các snack bar đang hiển thị.
@@ -46,17 +55,64 @@ class _TabsScreenState extends State<TabsScreen> {
     if (identifier == 'filters') {
       final result = await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
-          builder: (context) => const FiltersScreen(),
+          builder: (context) => FiltersScreen(
+            currentFillers: _selectedfilters,
+          ),
         ),
       );
-      print(result);
+      setState(() {
+        _selectedfilters = result ?? _selectedfilters;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final availableMeals = dummyMeals.where((meal) {
+      print('Checking meal: ${meal.title}');
+
+      if (_selectedfilters[Filter.glutenFree]!) {
+        print(
+            'Gluten-free filter active: ${_selectedfilters[Filter.glutenFree]}');
+        if (!meal.isGlutenFree) {
+          print('${meal.title} is not gluten-free, excluding from results');
+          return false;
+        }
+      }
+
+      if (_selectedfilters[Filter.lactoseFree]!) {
+        print(
+            'Lactose-free filter active: ${_selectedfilters[Filter.lactoseFree]}');
+        if (!meal.isLactoseFree) {
+          print('${meal.title} is not lactose-free, excluding from results');
+          return false;
+        }
+      }
+
+      if (_selectedfilters[Filter.vegetarian]!) {
+        print(
+            'Vegetarian filter active: ${_selectedfilters[Filter.vegetarian]}');
+        if (!meal.isVegetarian) {
+          print('${meal.title} is not vegetarian, excluding from results');
+          return false;
+        }
+      }
+
+      if (_selectedfilters[Filter.vegan]!) {
+        print('Vegan filter active: ${_selectedfilters[Filter.vegan]}');
+        if (!meal.isVegan) {
+          print('${meal.title} is not vegan, excluding from results');
+          return false;
+        }
+      }
+
+      print('${meal.title} passes all filters, including in results');
+      return true;
+    }).toList();
+
     Widget activePage = CategoriesScreen(
       onToggleFavorite: _toggleFavoriteStatus,
+      availableMeals: availableMeals,
     );
     var activePageTitle = 'Categories';
     if (_selectedTabIndex == 1) {
