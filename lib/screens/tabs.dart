@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_app/data/dummy_data.dart';
 import 'package:meals_app/models/meals.dart';
+import 'package:meals_app/providers/favorites_provider.dart';
 import 'package:meals_app/providers/meals_provider.dart';
 import 'package:meals_app/screens/categories.dart';
 import 'package:meals_app/screens/filters.dart';
@@ -23,26 +24,12 @@ class TabsScreen extends ConsumerStatefulWidget {
 }
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
-  final List<Meal> _favoriteMeals = [];
   Map<Filter, bool> _selectedfilters = kInitialFilters;
   void _showInfoMessage(String message) {
     ScaffoldMessenger.of(context)
         .clearSnackBars(); // Xóa tất cả các snack bar đang hiển thị.
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  void _toggleFavoriteStatus(Meal meal) {
-    final isExisting = _favoriteMeals.contains(meal);
-    setState(() {
-      if (isExisting) {
-        _favoriteMeals.remove(meal);
-        _showInfoMessage('Removed from favorites!');
-      } else {
-        _favoriteMeals.add(meal);
-        _showInfoMessage('Added to favorites!');
-      }
-    });
   }
 
   int _selectedTabIndex = 0;
@@ -114,14 +101,13 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     }).toList();
 
     Widget activePage = CategoriesScreen(
-      onToggleFavorite: _toggleFavoriteStatus,
       availableMeals: availableMeals,
     );
     var activePageTitle = 'Categories';
     if (_selectedTabIndex == 1) {
+      final favoriteMeals = ref.watch(favoriteMealsProvier);
       activePage = MealsScreen(
-        meals: _favoriteMeals,
-        onToggleFavorite: _toggleFavoriteStatus,
+        meals: favoriteMeals,
       );
       activePageTitle = 'Your Favorites';
     }
