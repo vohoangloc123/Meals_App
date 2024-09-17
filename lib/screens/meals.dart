@@ -14,9 +14,8 @@ class MealsScreen extends StatelessWidget {
   // Hàm này sẽ được gọi khi người dùng chọn một món ăn. Nó sẽ điều hướng
   // người dùng đến màn hình chi tiết món ăn (MealDetails).
   void selectMeal(BuildContext context, Meal meal) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            MealDetails(meal: meal, onToggleFavorite: onToggleFavorite)));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => MealDetails(meal: meal)));
     // Navigator.of(context).push() sẽ đẩy (push) màn hình MealDetails lên trên ngăn xếp (stack) màn hình hiện tại,
     // và hiển thị chi tiết món ăn mà người dùng chọn.
   }

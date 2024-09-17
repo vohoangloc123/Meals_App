@@ -25,12 +25,6 @@ class TabsScreen extends ConsumerStatefulWidget {
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
   Map<Filter, bool> _selectedfilters = kInitialFilters;
-  void _showInfoMessage(String message) {
-    ScaffoldMessenger.of(context)
-        .clearSnackBars(); // Xóa tất cả các snack bar đang hiển thị.
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
 
   int _selectedTabIndex = 0;
   void _selectPage(int index) {
