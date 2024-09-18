@@ -21,7 +21,7 @@ class FiltersScreen extends ConsumerWidget {
                   .setFilter(Filter.glutenFree, isChecked);
             },
             title: Text(
-              "Glutten-free",
+              "Gluten-free",
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
