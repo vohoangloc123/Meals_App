@@ -23,8 +23,6 @@ class TabsScreen extends ConsumerStatefulWidget {
 }
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
-  Map<Filter, bool> _selectedfilters = kInitialFilters;
-
   int _selectedTabIndex = 0;
   void _selectPage(int index) {
     setState(() {
@@ -37,52 +35,46 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     if (identifier == 'filters') {
       final result = await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
-          builder: (context) => FiltersScreen(
-            currentFillers: _selectedfilters,
-          ),
+          builder: (context) => const FiltersScreen(),
         ),
       );
-      setState(() {
-        _selectedfilters = result ?? _selectedfilters;
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final meals = ref.watch(mealsProvider);
+    final activeFilters = ref.watch(filtersProvider);
     final availableMeals = meals.where((meal) {
       print('Checking meal: ${meal.title}');
 
-      if (_selectedfilters[Filter.glutenFree]!) {
-        print(
-            'Gluten-free filter active: ${_selectedfilters[Filter.glutenFree]}');
+      if (activeFilters[Filter.glutenFree]!) {
+        print('Gluten-free filter active: ${activeFilters[Filter.glutenFree]}');
         if (!meal.isGlutenFree) {
           print('${meal.title} is not gluten-free, excluding from results');
           return false;
         }
       }
 
-      if (_selectedfilters[Filter.lactoseFree]!) {
+      if (activeFilters[Filter.lactoseFree]!) {
         print(
-            'Lactose-free filter active: ${_selectedfilters[Filter.lactoseFree]}');
+            'Lactose-free filter active: ${activeFilters[Filter.lactoseFree]}');
         if (!meal.isLactoseFree) {
           print('${meal.title} is not lactose-free, excluding from results');
           return false;
         }
       }
 
-      if (_selectedfilters[Filter.vegetarian]!) {
-        print(
-            'Vegetarian filter active: ${_selectedfilters[Filter.vegetarian]}');
+      if (activeFilters[Filter.vegetarian]!) {
+        print('Vegetarian filter active: ${activeFilters[Filter.vegetarian]}');
         if (!meal.isVegetarian) {
           print('${meal.title} is not vegetarian, excluding from results');
           return false;
         }
       }
 
-      if (_selectedfilters[Filter.vegan]!) {
-        print('Vegan filter active: ${_selectedfilters[Filter.vegan]}');
+      if (activeFilters[Filter.vegan]!) {
+        print('Vegan filter active: ${activeFilters[Filter.vegan]}');
         if (!meal.isVegan) {
           print('${meal.title} is not vegan, excluding from results');
           return false;

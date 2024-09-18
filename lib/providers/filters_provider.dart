@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:meals_app/screens/filters.dart';
 
 enum Filter {
   glutenFree,
@@ -16,6 +15,10 @@ class FiltersNotifier extends StateNotifier<Map<Filter, bool>> {
           Filter.vegetarian: false,
           Filter.vegan: false,
         });
+  void setFilters(Map<Filter, bool> chosenFilters) {
+    state = chosenFilters;
+  }
+
   void setFilter(Filter filter, bool isActive) {
     state = {...state, filter: isActive};
   }
