@@ -43,64 +43,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     final activeFilters = ref.watch(filtersProvider);
 
 // Lọc danh sách các món ăn dựa trên các bộ lọc đang hoạt động
-    final availableMeals = meals.where((meal) {
-      // In ra thông tin của món ăn hiện tại đang được kiểm tra
-      print('Checking meal: ${meal.title}');
-
-      // Kiểm tra nếu bộ lọc 'Gluten-free' đang được kích hoạt
-      if (activeFilters[Filter.glutenFree]!) {
-        // In ra trạng thái của bộ lọc 'Gluten-free'
-        print('Gluten-free filter active: ${activeFilters[Filter.glutenFree]}');
-
-        // Nếu món ăn không phải là 'Gluten-free', loại bỏ món ăn này
-        if (!meal.isGlutenFree) {
-          print('${meal.title} is not gluten-free, excluding from results');
-          return false; // Loại món ăn này khỏi kết quả
-        }
-      }
-
-      // Kiểm tra nếu bộ lọc 'Lactose-free' đang được kích hoạt
-      if (activeFilters[Filter.lactoseFree]!) {
-        // In ra trạng thái của bộ lọc 'Lactose-free'
-        print(
-            'Lactose-free filter active: ${activeFilters[Filter.lactoseFree]}');
-
-        // Nếu món ăn không phải là 'Lactose-free', loại bỏ món ăn này
-        if (!meal.isLactoseFree) {
-          print('${meal.title} is not lactose-free, excluding from results');
-          return false; // Loại món ăn này khỏi kết quả
-        }
-      }
-
-      // Kiểm tra nếu bộ lọc 'Vegetarian' đang được kích hoạt
-      if (activeFilters[Filter.vegetarian]!) {
-        // In ra trạng thái của bộ lọc 'Vegetarian'
-        print('Vegetarian filter active: ${activeFilters[Filter.vegetarian]}');
-
-        // Nếu món ăn không phải là 'Vegetarian', loại bỏ món ăn này
-        if (!meal.isVegetarian) {
-          print('${meal.title} is not vegetarian, excluding from results');
-          return false; // Loại món ăn này khỏi kết quả
-        }
-      }
-
-      // Kiểm tra nếu bộ lọc 'Vegan' đang được kích hoạt
-      if (activeFilters[Filter.vegan]!) {
-        // In ra trạng thái của bộ lọc 'Vegan'
-        print('Vegan filter active: ${activeFilters[Filter.vegan]}');
-
-        // Nếu món ăn không phải là 'Vegan', loại bỏ món ăn này
-        if (!meal.isVegan) {
-          print('${meal.title} is not vegan, excluding from results');
-          return false; // Loại món ăn này khỏi kết quả
-        }
-      }
-
-      // Nếu món ăn vượt qua tất cả các bộ lọc, giữ lại món ăn này
-      print('${meal.title} passes all filters, including in results');
-      return true; // Giữ món ăn trong danh sách kết quả
-    }).toList(); // Chuyển kết quả lọc thành danh sách (List)
-
+    final availableMeals = ref.watch(filteredMealsProvider);
     Widget activePage = CategoriesScreen(
       availableMeals: availableMeals,
     );
