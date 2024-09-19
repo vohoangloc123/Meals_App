@@ -6,14 +6,17 @@ import 'package:meals_app/providers/favorites_provider.dart';
 class MealDetails extends ConsumerWidget {
   const MealDetails({Key? key, required this.meal}) : super(key: key);
   final Meal meal;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favoriteMeals = ref.watch(favoriteMealsProvier);
+    final isFavorite = favoriteMeals.contains(meal);
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
           IconButton(
-            icon: const Icon(Icons.star),
+            icon: Icon(isFavorite ? Icons.star : Icons.star_border),
             onPressed: () {
               final wasAdded = ref
                   .read(favoriteMealsProvier.notifier)
