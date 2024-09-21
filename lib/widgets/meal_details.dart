@@ -10,7 +10,7 @@ class MealDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favoriteMeals = ref.watch(favoriteMealsProvier);
-    final isFavorite = favoriteMeals.contains(meal);
+    var isFavorite = favoriteMeals.contains(meal);
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
@@ -20,16 +20,20 @@ class MealDetails extends ConsumerWidget {
               duration: const Duration(milliseconds: 300),
               transitionBuilder: (child, animation) {
                 return RotationTransition(
-                  turns: animation,
+                  turns: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
                   child: child,
                 );
               },
-              child: Icon(isFavorite ? Icons.star : Icons.star_border),
+              child: Icon(
+                isFavorite ? Icons.star : Icons.star_border,
+                key: ValueKey<bool>(isFavorite),
+              ),
             ),
             onPressed: () {
               final wasAdded = ref
                   .read(favoriteMealsProvier.notifier)
                   .toggleMealFavoriteStatus(meal);
+              isFavorite = !isFavorite;
               ScaffoldMessenger.of(context)
                   .clearSnackBars(); // Xóa tất cả các snack bar đang hiển thị.
               ScaffoldMessenger.of(context).showSnackBar(

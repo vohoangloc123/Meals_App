@@ -9,7 +9,7 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
 
     if (mealIsFavorite) {
       // Nếu món ăn đã yêu thích, loại bỏ nó khỏi danh sách yêu thích
-      state = state.where((id) => id != meal.id).toList();
+      state = state.where((m) => m.id != meal.id).toList();
       return false;
     } else {
       // Nếu món ăn chưa yêu thích, thêm nó vào danh sách yêu thích
